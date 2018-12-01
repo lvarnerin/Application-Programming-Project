@@ -12,7 +12,9 @@ public class Driver {
 		
 		try {
 			// 1. Get a connection to database
-			myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/demo", "root" , "password");
+			/* myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/demo", "root" , "password"); */
+			
+			myConn = DriverManager.getConnection("jdbc:mysql://javaproject.cwnzf8egwsfw.us-east-2.rds.amazonaws.com:3306/javaproject", "root" , "password");
 			
 			// 2. Create a statement
 			myStmt = myConn.createStatement();
