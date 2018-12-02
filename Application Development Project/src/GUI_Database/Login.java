@@ -1,5 +1,7 @@
 package GUI_Database;
 
+import java.sql.*;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -7,17 +9,26 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JRadioButton;
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JPasswordField;
 import java.awt.Color;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.awt.event.ActionEvent;
 
 public class Login extends JFrame {
 
+	protected static final AbstractButton CUsername = null;
+	protected static final AbstractButton CPassword = null;
 	private JPanel contentPane;
 	private JPasswordField passwordField;
 	private JTextField textField;
@@ -64,15 +75,33 @@ public class Login extends JFrame {
 		contentPane.add(passwordField);
 		
 		JButton btnLogin = new JButton("Login");
-		btnLogin.setForeground(Color.BLACK);
-		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		//btnLogin.setForeground(Color.BLACK);
+		//btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {			
+				try {
+					Class.forName("com.mysql.cj.jdbc.Driver");
+					Connection con=DriverManager.getConnection("jdbc:mysql://flightproject.cwnzf8egwsfw.us-east-2.rds.amazonaws.com:3306/flightproject","root","password");
+					Statement stmt=con.createStatement();
+					String sql="Select * from Customer where CUsername='"+CUsername.getText()+"' and CPassword='"+CPassword.getText()+"'";
+					ResultSet rs=stmt.executeQuery(sql);
+					if(rs.next())
+						JOptionPane.showMessageDialog(null,"Login Sucessfully...");
+					else
+						JOptionPane.showMessageDialog(null,"Incorrect username and Password...");
+					con.close();
+				}catch(Exception e) {System.out.print(e);}
+			}
+		});
+	
+		
 		btnLogin.setBounds(87, 167, 89, 23);
 		contentPane.add(btnLogin);
 		
 		textField = new JTextField();
 		textField.setBounds(169, 52, 225, 20);
 		contentPane.add(textField);
-		textField.setColumns(10);
+		textField.setColumns(10);  
 		
 		JButton btnNewButton = new JButton("Register");
 		btnNewButton.addActionListener(new ActionListener() {
